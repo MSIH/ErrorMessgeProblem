@@ -1,0 +1,103 @@
+﻿
+
+<h3>BookComponent</h3>
+
+@typeparam TModel where TModel : class, new()
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Context="editFormComponent" OnValidSubmit="@HandleValidSubmit" Model="@model">
+        <DataAnnotationsValidator />
+        <h4>Validation Summary</h4>
+        <ValidationSummary />
+        @foreach (var property in model.GetType().GetProperties())
+        {
+            var propertyValue = property.GetValue(model)?.ToString();
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="form-group">
+                        <input @onchange='((e) => HandleValueChanged(e, property.Name))'
+                               type="text"
+                               value=@propertyValue
+                               class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <h5>Validation Message</h5>
+            <ValidationMessage For=@(() => property.Name) />
+
+        }
+     <hr />
+        <div class="row mb-3">
+            <div class="col">
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </EditForm>
+
+    <EditForm Context="editFormComponent" OnValidSubmit="@HandleValidSubmit" Model="@book">
+        <DataAnnotationsValidator />
+        <h4>Validation Summary</h4>
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="title">Title</label>
+            <InputText id="title" class="form-control" @bind-Value="@book.Title" />
+            <ValidationMessage For="@(() => book.Title)" />
+        </div>
+
+        <hr />
+        <div class="row mb-3">
+            <div class="col">
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </EditForm>
+}
+
+@code {
+    [Parameter] public TModel model { get; set; }
+
+
+    private EditContext editFormComponent;
+
+    protected override void OnInitialized()
+    {
+        model = Activator.CreateInstance<TModel>();
+        editFormComponent = new EditContext(model);
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            editFormComponent.Validate();
+        }
+    }
+
+    private void HandleValueChanged(ChangeEventArgs e, string propertyName)
+    {
+        var value = e.Value as string;
+        var property = model?.GetType().GetProperty(propertyName);
+        if (property?.GetValue(model) as string != value)
+        {
+            if (property.PropertyType == typeof(string))
+            {
+                property?.SetValue(model, value);
+            }
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        // Handle valid form submission
+    }
+}

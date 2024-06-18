@@ -1,0 +1,19 @@
+﻿@page "/"
+@using System.ComponentModel.DataAnnotations
+<h3>Edit Book</h3>
+<h3>Generic Componet Validation Message Not Working</h3>
+<GenericComponent TModel="BookModel" />
+
+<h3>Book Componet Validation Message Working</h3>
+<BookComponent />
+
+@code {
+    private BookModel bookModel = new BookModel();
+
+
+public class BookModel
+    {
+        [StringLength(5, MinimumLength = 5, ErrorMessage = "Title must be at least 5 characters long."),Required]
+        public string Title { get; set; }
+    }
+}
