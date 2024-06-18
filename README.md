@@ -22,7 +22,6 @@ This does not work
         </div>
         <h5>Validation Message</h5>
         <ValidationMessage For=@(() => property.Name) />
-
     }
 
 
