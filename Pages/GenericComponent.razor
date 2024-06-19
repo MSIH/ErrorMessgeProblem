@@ -1,7 +1,5 @@
-﻿
-
-<h3>BookComponent</h3>
-
+﻿@using System.Linq.Expressions
+@using System.Reflection
 @typeparam TModel where TModel : class, new()
 
 @if (model == null)
@@ -27,31 +25,9 @@ else
                     </div>
                 </div>
             </div>
-            <h5>Validation Message</h5>
+            <h5>Validation Message property.Name</h5>
             <ValidationMessage For=@(() => property.Name) />
-
         }
-     <hr />
-        <div class="row mb-3">
-            <div class="col">
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
-            </div>
-        </div>
-    </EditForm>
-
-    <EditForm Context="editFormComponent" OnValidSubmit="@HandleValidSubmit" Model="@book">
-        <DataAnnotationsValidator />
-        <h4>Validation Summary</h4>
-        <ValidationSummary />
-
-        <div class="form-group">
-            <label for="title">Title</label>
-            <InputText id="title" class="form-control" @bind-Value="@book.Title" />
-            <ValidationMessage For="@(() => book.Title)" />
-        </div>
-
         <hr />
         <div class="row mb-3">
             <div class="col">
