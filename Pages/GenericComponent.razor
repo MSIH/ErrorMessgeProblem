@@ -27,6 +27,8 @@ else
             </div>
             <h5>Validation Message property.Name</h5>
             <ValidationMessage For=@(() => property.Name) />
+            <h5> Generic Validation Message property.Name </h5>
+            <GenericValidationMessage FieldName="@property.Name" />
         }
         <hr />
         <div class="row mb-3">
